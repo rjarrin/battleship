@@ -10,7 +10,7 @@
     "build": "webpack",
     "lint": "eslint './src/modules/*.js' --fix",
     "check": "prettier './src/modules/*.js' --check",
-    "write": "prettier './src/modules/*.js' --write"
+    "write": "prettier './src/modules/*.js' './src/modules/tests/*.js' --write"
   },
   "keywords": [],
   "author": "",
