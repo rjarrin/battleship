@@ -48,6 +48,20 @@ class Gameboard {
             }
         }
     }
+
+    // Check if an attack hits a ship
+    receiveAttack(x, y) {
+        const ship = this.board[y][x];
+        if (ship) {
+            ship.hit();
+            if (ship.isSunk()) {
+                // Display a message that the ship has sunk
+            } else {
+                // Record the missed attack
+                this.missAttacks.push({ x, y });
+            }
+        }
+    }
 }
 
 export default Gameboard;
