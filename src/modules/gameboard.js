@@ -62,6 +62,21 @@ class Gameboard {
             }
         }
     }
+
+    // Check if all ships on the gameboard have been sunk
+    allShipsSunk() {
+        let allSunk = true;
+        // Iterate through each cell on the board
+        this.board.forEach((row) => {
+            row.forEach((cell) => {
+                // Check cell status (needs to be a cell in use and should not be sunk to return false)
+                if (cell && !cell.isSunk()) {
+                    allSunk = false;
+                }
+            });
+        });
+        return allSunk;
+    }
 }
 
 export default Gameboard;

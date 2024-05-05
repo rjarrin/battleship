@@ -9,7 +9,7 @@ describe('Gameboard', () => {
 
     beforeEach(() => {
         // Create a new gameboard before each test
-        gameboard = new Gameboard(20);
+        gameboard = new Gameboard(7);
     });
 
     // Testing placeShip()
@@ -29,5 +29,22 @@ describe('Gameboard', () => {
         gameboard.receiveAttack(0, 0);
         // Check if the ship's hit count was incremented
         expect(ship.hits).toBe(1);
+    });
+
+    // Testing allShipsSunk()
+    test('Should correctly determine if all ships are sunk', () => {
+        const ship1 = new Ship(3, 0);
+        const ship2 = new Ship(2, 0);
+        gameboard.placeShip(ship1, 0, 0, 'horizontal');
+        gameboard.placeShip(ship2, 0, 5, 'horizontal');
+        // Simulate the attacks to sink both ships
+        for (let i = 0; i < 3; i += 1) {
+            gameboard.receiveAttack(i, 0);
+        }
+        for (let i = 0; i < 2; i += 1) {
+            gameboard.receiveAttack(i, 5);
+        }
+        // Check if all ships are sunk
+        expect(gameboard.allShipsSunk()).toBe(true);
     });
 });
