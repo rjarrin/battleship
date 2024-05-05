@@ -2,7 +2,7 @@ class Gameboard {
     constructor(size) {
         this.size = size;
         this.board = Gameboard.createBoard(size);
-        this.missAttacks = [];
+        this.missedAttacks = [];
     }
 
     // Initialize a 2D array with the given size
@@ -56,10 +56,10 @@ class Gameboard {
             ship.hit();
             if (ship.isSunk()) {
                 // Display a message that the ship has sunk
-            } else {
-                // Record the missed attack
-                this.missAttacks.push({ x, y });
             }
+        } else {
+            // Record the missed attack
+            this.missedAttacks.push({ x, y });
         }
     }
 

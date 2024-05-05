@@ -9,7 +9,7 @@ describe('Gameboard', () => {
 
     beforeEach(() => {
         // Create a new gameboard before each test
-        gameboard = new Gameboard(7);
+        gameboard = new Gameboard(10);
     });
 
     // Testing placeShip()
@@ -46,5 +46,10 @@ describe('Gameboard', () => {
         }
         // Check if all ships are sunk
         expect(gameboard.allShipsSunk()).toBe(true);
+    });
+
+    test('Should correctly track missed attacks', () => {
+        gameboard.receiveAttack(0, 0);
+        expect(gameboard.missedAttacks).toContainEqual({ x: 0, y: 0 });
     });
 });
