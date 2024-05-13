@@ -3,13 +3,13 @@
 /* eslint-disable import/no-named-as-default */
 import '../style.css';
 import RealPlayer from './realPlayer';
-// import ComputerPlayer from './computerPlayer';
+import ComputerPlayer from './computerPlayer';
 // import Gameboard from './gameboard';
 import Ship from './ship';
 
 // Initialize the players
 const player1 = new RealPlayer();
-// const player2 = new ComputerPlayer();
+const computer = new ComputerPlayer();
 
 // Initalize the gameboard and ships
 const { gameboard } = player1;
@@ -23,6 +23,16 @@ const ships = [
 let currentShipIndex = 0;
 let currentShip = ships[currentShipIndex];
 let currentOrientation = 'horizontal';
+
+// Computer ships
+const computerShips = [
+    { type: 'Carrier', length: 5 },
+    { type: 'Battleship', length: 4 },
+    { type: 'Submarine', length: 3 },
+    { type: 'Destroyer', length: 3 },
+    { type: 'Boat', length: 2 },
+];
+
 
 function updateCurrentShipInfo() {
     const shipInfo = document.getElementById('current-ship-info');
@@ -70,7 +80,7 @@ function generateModalGrid() {
                         const cell2 = document.getElementById(`cell-${x}-${y}`);
                         if (cell2) {
                             if (cell2.classList.contains('placed')) {
-                                cell2.style.backgroundColor = 'red'; // Change color to red for overlapping cells
+                                cell2.style.backgroundColor = 'red'; 
                             } else {
                                 cell2.style.backgroundColor = 'lightblue';
                             }
@@ -104,7 +114,7 @@ function generateModalGrid() {
                         const cell2 = document.getElementById(`cell-${x}-${y}`);
                         if (cell2) {
                             if (cell2.classList.contains('placed')) {
-                                cell2.style.backgroundColor = 'red'; // Change color to red for overlapping cells
+                                cell2.style.backgroundColor = 'red';
                             } else {
                                 cell2.style.backgroundColor = 'lightblue';
                             }
@@ -115,7 +125,6 @@ function generateModalGrid() {
 
             // Mouseout event
             cell.addEventListener('mouseout', () => {
-                // Reset the background color of all cells within the ship's range
                 const startX = parseInt(cell.dataset.row, 10);
                 const startY = parseInt(cell.dataset.col, 10);
                 let endX;
@@ -136,9 +145,9 @@ function generateModalGrid() {
                         const cell2 = document.getElementById(`cell-${x}-${y}`);
                         if (cell2) {
                             if (cell2.classList.contains('placed')) {
-                                cell2.style.backgroundColor = 'grey'; // Reset to grey for placed ships
+                                cell2.style.backgroundColor = 'grey';
                             } else {
-                                cell2.style.backgroundColor = 'white'; // Reset to white for empty cells
+                                cell2.style.backgroundColor = 'white';
                             }
                         }
                     }
@@ -169,17 +178,17 @@ function generateModalGrid() {
                         const cell2 = document.getElementById(`cell-${x}-${y}`);
                         if (cell2 && cell2.classList.contains('placed')) {
                             isOverlapping = true;
-                            break; // Exit the loop as soon as an overlapping cell is found
+                            break;
                         }
                     }
-                    if (isOverlapping) break; // Exit the outer loop as well
+                    if (isOverlapping) break;
                 }
 
                 if (isOverlapping) {
                     alert(
                         'You cannot place a ship over another ship. Please choose a different location.',
                     );
-                    return; // Prevent the ship from being placed
+                    return;
                 }
 
                 // Update the player's gameboard with the Ship object
@@ -207,7 +216,7 @@ function generateModalGrid() {
                 currentShipIndex += 1;
                 if (currentShipIndex < ships.length) {
                     currentShip = ships[currentShipIndex];
-                    updateCurrentShipInfo(); // Update ship info after placing a ship
+                    updateCurrentShipInfo();
                 } else {
                     updateCurrentShipInfo(); // Update ship info after all ships have been placed
                     const modal = document.getElementById('place-ships-modal');
@@ -233,8 +242,33 @@ function generateModalGrid() {
     }
 }
 
+function generateComputerGrid() {
+    const computerContainer = document.getElementById("computer-container");
+
+    for (let i = 0; i < computer.gameboard.size; i++) {
+        for (let j = 0; j < computer.gameboard.size; j++) {
+            const cell = document.createElement('div');
+            cell.dataset.row = i;
+            cell.dataset.col = j;
+            cell.id = `computer-cell-${i}-${j}`;
+
+            // Update the cell's style based on the gameboard state
+            if (computer.gameboard.board[i][j]) {
+                // If the cell contains a ship, update the style accordingly
+                cell.style.backgroundColor = 'blue';
+            } else {
+                // If the cell is empty, update the style accordingly
+                cell.style.backgroundColor = 'white';
+            }
+
+            computerContainer.appendChild(cell);
+        }
+    }
+}
+
 document
     .getElementById('modal-rotate')
     .addEventListener('click', toggleOrientation);
 updateCurrentShipInfo();
+generateComputerGrid();
 generateModalGrid();
