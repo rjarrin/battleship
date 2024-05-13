@@ -57,10 +57,12 @@ class Gameboard {
             if (ship.isSunk()) {
                 // Display a message that the ship has sunk
             }
-        } else {
-            // Record the missed attack
-            this.missedAttacks.push({ x, y });
-        }
+            return true;
+        } 
+        // Record the missed attack
+        this.missedAttacks.push({ x, y });
+        return false;
+        
     }
 
     // Check if all ships on the gameboard have been sunk
