@@ -242,11 +242,28 @@ function generateModalGrid() {
     }
 }
 
+function computerPlacement() {
+    computerShips.forEach(ship => {
+        let placed = false;
+        while (!placed) {
+            // Randomly select a starting position
+            const startX = Math.floor(Math.random() * computer.gameboard.size);
+            const startY = Math.floor(Math.random() * computer.gameboard.size);
+            const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+            if(computer.gameboard.canPlaceShip(ship, startX, startY, orientation)) {
+                // Place the ship
+                computer.gameboard.placeShip(ship, startX, startY, orientation);
+                placed = true;
+            }
+        }
+    });
+}
+
 function generateComputerGrid() {
     const computerContainer = document.getElementById("computer-container");
 
-    for (let i = 0; i < computer.gameboard.size; i++) {
-        for (let j = 0; j < computer.gameboard.size; j++) {
+    for (let i = 0; i < computer.gameboard.size; i+=1) {
+        for (let j = 0; j < computer.gameboard.size; j+=1) {
             const cell = document.createElement('div');
             cell.dataset.row = i;
             cell.dataset.col = j;
@@ -270,5 +287,6 @@ document
     .getElementById('modal-rotate')
     .addEventListener('click', toggleOrientation);
 updateCurrentShipInfo();
+computerPlacement();
 generateComputerGrid();
 generateModalGrid();
