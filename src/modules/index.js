@@ -284,16 +284,27 @@ function updateTurnMessage(playerTurn) {
 }
 
 function computerAttack() {
-    // Randomly select a cell to attack
-    const row = Math.floor(Math.random() * player1.gameboard.size);
-    const col = Math.floor(Math.random() * player1.gameboard.size);
-    // Simulate the attack
-    const cell = document.getElementById(`cell-${row}-${col}`);
-    if (player1.gameboard.board[row][col]) {
-        cell.style.backgroundColor = 'red';
-    } else {
-        cell.style.backgroundColor = 'lightblue';
-    }
+    let attacked = true;
+
+    do {
+        // Randomly select a cell to attack
+        const row = Math.floor(Math.random() * player1.gameboard.size);
+        const col = Math.floor(Math.random() * player1.gameboard.size);
+
+        // Check if the cell was already attacked
+        const cell = document.getElementById(`cell-${row}-${col}`);
+        console.log(`ATTEMPTING TO ATTACK ${cell.id}`);
+        if (!cell.classList.contains('attacked')) {
+            if (player1.gameboard.board[row][col]) {
+                cell.style.backgroundColor = 'red';
+                cell.classList.add('attacked');
+            } else {
+                cell.style.backgroundColor = 'lightblue';
+                cell.classList.add('attacked');
+            }
+            attacked = false;
+        }
+    } while (attacked);
     // Update the turn
     isPlayerTurn = true;
     updateTurnMessage(isPlayerTurn);
