@@ -314,10 +314,18 @@ function simulateAttack(row, col) {
     if (!isPlayerTurn) return;
 
     const cell = document.getElementById(`computer-cell-${row}-${col}`);
+    if (cell.classList.contains('attacked')) {
+        alert(
+            'This cell has already been attacked. Please choose another cell',
+        );
+        return;
+    }
     if (computer.gameboard.board[row][col]) {
         cell.style.backgroundColor = 'red';
+        cell.classList.add('attacked');
     } else {
         cell.style.backgroundColor = 'grey';
+        cell.classList.add('attacked');
     }
     // Switch turns
     isPlayerTurn = false;
