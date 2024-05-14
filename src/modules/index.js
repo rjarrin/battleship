@@ -11,6 +11,9 @@ import Ship from './ship';
 const player1 = new RealPlayer();
 const computer = new ComputerPlayer();
 
+// Define the initial turn
+let isPlayerTurn = true;
+
 // Initalize the gameboard and ships
 const { gameboard } = player1;
 const ships = [
@@ -32,7 +35,6 @@ const computerShips = [
     { type: 'Destroyer', length: 3 },
     { type: 'Boat', length: 2 },
 ];
-
 
 function updateCurrentShipInfo() {
     const shipInfo = document.getElementById('current-ship-info');
@@ -80,7 +82,7 @@ function generateModalGrid() {
                         const cell2 = document.getElementById(`cell-${x}-${y}`);
                         if (cell2) {
                             if (cell2.classList.contains('placed')) {
-                                cell2.style.backgroundColor = 'red'; 
+                                cell2.style.backgroundColor = 'red';
                             } else {
                                 cell2.style.backgroundColor = 'lightblue';
                             }
@@ -194,7 +196,7 @@ function generateModalGrid() {
                 // Update the player's gameboard with the Ship object
                 for (let x = startX; x <= endX; x += 1) {
                     for (let y = startY; y <= endY; y += 1) {
-                        player1.gameboard.board[y][x] = new Ship(
+                        player1.gameboard.board[x][y] = new Ship(
                             currentShip.length,
                             0,
                         );
@@ -232,8 +234,8 @@ function generateModalGrid() {
 
                     // Print the player gameboard for confirmation of correct item placement
                     console.log(player1.gameboard.board);
-                    console.log(player1.gameboard.receiveAttack(1,2));
-                    console.log(player1.gameboard.receiveAttack(3,1));
+                    console.log(player1.gameboard.receiveAttack(1, 2));
+                    console.log(player1.gameboard.receiveAttack(3, 1));
                 }
             });
 
@@ -243,14 +245,21 @@ function generateModalGrid() {
 }
 
 function computerPlacement() {
-    computerShips.forEach(ship => {
+    computerShips.forEach((ship) => {
         let placed = false;
         while (!placed) {
             // Randomly select a starting position
             const startX = Math.floor(Math.random() * computer.gameboard.size);
             const startY = Math.floor(Math.random() * computer.gameboard.size);
             const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-            if(computer.gameboard.canPlaceShip(ship, startX, startY, orientation)) {
+            if (
+                computer.gameboard.canPlaceShip(
+                    ship,
+                    startX,
+                    startY,
+                    orientation,
+                )
+            ) {
                 // Place the ship
                 computer.gameboard.placeShip(ship, startX, startY, orientation);
                 placed = true;
@@ -259,15 +268,67 @@ function computerPlacement() {
     });
 }
 
-function generateComputerGrid() {
-    const computerContainer = document.getElementById("computer-container");
+function updateTurnMessage(playerTurn) {
+    const playerTurnMessage = document.getElementById('player-turn-message');
+    const computerTurnMessage = document.getElementById(
+        'computer-turn-message',
+    );
 
-    for (let i = 0; i < computer.gameboard.size; i+=1) {
-        for (let j = 0; j < computer.gameboard.size; j+=1) {
+    if (playerTurn) {
+        playerTurnMessage.textContent = 'Your Turn';
+        computerTurnMessage.textContent = '';
+    } else {
+        playerTurnMessage.textContent = '';
+        computerTurnMessage.textContent = "Computer's Turn";
+    }
+}
+
+function computerAttack() {
+    // Randomly select a cell to attack
+    const row = Math.floor(Math.random() * player1.gameboard.size);
+    const col = Math.floor(Math.random() * player1.gameboard.size);
+    // Simulate the attack
+    const cell = document.getElementById(`cell-${row}-${col}`);
+    if (player1.gameboard.board[row][col]) {
+        cell.style.backgroundColor = 'red';
+    } else {
+        cell.style.backgroundColor = 'lightblue';
+    }
+    // Update the turn
+    isPlayerTurn = true;
+    updateTurnMessage(isPlayerTurn);
+}
+
+function simulateAttack(row, col) {
+    if (!isPlayerTurn) return;
+
+    const cell = document.getElementById(`computer-cell-${row}-${col}`);
+    if (computer.gameboard.board[row][col]) {
+        cell.style.backgroundColor = 'red';
+    } else {
+        cell.style.backgroundColor = 'grey';
+    }
+    // Switch turns
+    isPlayerTurn = false;
+    updateTurnMessage(isPlayerTurn);
+    computerAttack();
+}
+
+function generateComputerGrid() {
+    const computerContainer = document.getElementById('computer-container');
+
+    for (let i = 0; i < computer.gameboard.size; i += 1) {
+        for (let j = 0; j < computer.gameboard.size; j += 1) {
             const cell = document.createElement('div');
             cell.dataset.row = i;
             cell.dataset.col = j;
             cell.id = `computer-cell-${i}-${j}`;
+            cell.classList.add('cell');
+
+            // Attach event listener for user clicks
+            cell.addEventListener('click', () => {
+                simulateAttack(i, j);
+            });
 
             // Update the cell's style based on the gameboard state
             if (computer.gameboard.board[i][j]) {
@@ -290,3 +351,4 @@ updateCurrentShipInfo();
 computerPlacement();
 generateComputerGrid();
 generateModalGrid();
+updateTurnMessage(isPlayerTurn);

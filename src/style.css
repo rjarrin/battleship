@@ -12,6 +12,12 @@ body {
     padding: 0;
 }
 
+#main-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
 #header {
     width: 100vw;
     height: var(--header-height);
@@ -75,4 +81,12 @@ body {
 #computer-container div {
     background-color: white;
     border: 1px solid black;
+}
+
+#player-turn-message,
+#computer-turn-message {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
 }
