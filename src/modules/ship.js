@@ -1,8 +1,9 @@
 class Ship {
-    constructor(length, hits) {
+    constructor(type, length, hits = 0) {
         if (typeof length !== 'number' || length <= 0) {
             throw new Error('Ship length must be a positive integer.');
         }
+        this.type = type;
         this.length = length;
         this.hits = hits;
         this.sunked = false;

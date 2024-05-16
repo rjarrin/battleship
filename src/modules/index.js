@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
 /* eslint-disable no-loop-func */ // --------> NEED TO ENABLE AND FIX THE BUGS
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
@@ -5,7 +7,7 @@ import '../style.css';
 import RealPlayer from './realPlayer';
 import ComputerPlayer from './computerPlayer';
 // import Gameboard from './gameboard';
-import Ship from './ship';
+// import Ship from './ship';
 
 // Initialize the players
 const player1 = new RealPlayer();
@@ -18,10 +20,10 @@ let isPlayerTurn = true;
 const { gameboard } = player1;
 const ships = [
     { type: 'Carrier', length: 5 },
-    { type: 'Battleship', length: 4 },
-    { type: 'Submarine', length: 3 },
-    { type: 'Destroyer', length: 3 },
-    { type: 'Boat', length: 2 },
+    // { type: 'Battleship', length: 4 },
+    // { type: 'Submarine', length: 3 },
+    // { type: 'Destroyer', length: 3 },
+    // { type: 'Boat', length: 2 },
 ];
 let currentShipIndex = 0;
 let currentShip = ships[currentShipIndex];
@@ -174,68 +176,58 @@ function generateModalGrid() {
                     endY = startY + currentShip.length - 1;
                 }
 
-                let isOverlapping = false;
-                for (let x = startX; x <= endX; x += 1) {
-                    for (let y = startY; y <= endY; y += 1) {
-                        const cell2 = document.getElementById(`cell-${x}-${y}`);
-                        if (cell2 && cell2.classList.contains('placed')) {
-                            isOverlapping = true;
-                            break;
-                        }
-                    }
-                    if (isOverlapping) break;
-                }
-
-                if (isOverlapping) {
-                    alert(
-                        'You cannot place a ship over another ship. Please choose a different location.',
-                    );
-                    return;
-                }
-
                 // Update the player's gameboard with the Ship object
-                for (let x = startX; x <= endX; x += 1) {
-                    for (let y = startY; y <= endY; y += 1) {
-                        player1.gameboard.board[x][y] = new Ship(
-                            currentShip.length,
-                            0,
-                        );
-                    }
-                }
+                if (
+                    player1.gameboard.canPlaceShip(
+                        currentShip,
+                        startX,
+                        startY,
+                        currentOrientation,
+                    )
+                ) {
+                    // Place the ship on the gameboard
+                    player1.gameboard.placeShip(
+                        currentShip,
+                        startX,
+                        startY,
+                        currentOrientation,
+                    );
 
-                // Change the background color of the highlighted cells to grey
-                for (let x = startX; x <= endX; x += 1) {
-                    for (let y = startY; y <= endY; y += 1) {
-                        const cell2 = document.getElementById(`cell-${x}-${y}`);
-                        if (cell2) {
-                            cell2.style.backgroundColor = 'grey';
-                            cell2.classList.add('placed');
+                    // Update the UI to reflect the ship placement
+                    for (let x = startX; x <= endX; x += 1) {
+                        for (let y = startY; y <= endY; y += 1) {
+                            const cell2 = document.getElementById(
+                                `cell-${x}-${y}`,
+                            );
+                            if (cell2) {
+                                cell2.style.backgroundColor = 'grey';
+                                cell2.classList.add('placed');
+                            }
                         }
                     }
-                }
 
-                // Move to the next ship in the list
-                currentShipIndex += 1;
-                if (currentShipIndex < ships.length) {
-                    currentShip = ships[currentShipIndex];
-                    updateCurrentShipInfo();
-                } else {
-                    updateCurrentShipInfo(); // Update ship info after all ships have been placed
-                    const modal = document.getElementById('place-ships-modal');
-                    if (modal) {
-                        modal.style.display = 'none';
+                    // Move to the next ship in the list
+                    currentShipIndex += 1;
+                    if (currentShipIndex < ships.length) {
+                        currentShip = ships[currentShipIndex];
+                        updateCurrentShipInfo();
+                    } else {
+                        updateCurrentShipInfo();
+                        const modal =
+                            document.getElementById('place-ships-modal');
+                        if (modal) {
+                            modal.style.display = 'none';
+                        }
+                        // Duplicate the grid to the player-container
+                        const playerContainer =
+                            document.getElementById('player-container');
+                        const newGrid = modalGrid.cloneNode(true);
+                        playerContainer.appendChild(newGrid);
+
+                        console.log(player1.gameboard.board);
                     }
-
-                    // Duplicate the grid to the player-container
-                    const playerContainer =
-                        document.getElementById('player-container');
-                    const newGrid = modalGrid.cloneNode(true);
-                    playerContainer.appendChild(newGrid);
-
-                    // Print the player gameboard for confirmation of correct item placement
-                    console.log(player1.gameboard.board);
-                    console.log(player1.gameboard.receiveAttack(1, 2));
-                    console.log(player1.gameboard.receiveAttack(3, 1));
+                } else {
+                    alert('Cannot place a ship here');
                 }
             });
 
@@ -302,6 +294,7 @@ function computerAttack() {
                 cell.style.backgroundColor = 'lightblue';
                 cell.classList.add('attacked');
             }
+            player1.gameboard.receiveAttack(row, col);
             attacked = false;
         }
     } while (attacked);
@@ -327,6 +320,7 @@ function simulateAttack(row, col) {
         cell.style.backgroundColor = 'grey';
         cell.classList.add('attacked');
     }
+    computer.gameboard.receiveAttack(row, col);
     // Switch turns
     isPlayerTurn = false;
     updateTurnMessage(isPlayerTurn);
@@ -361,6 +355,9 @@ function generateComputerGrid() {
             computerContainer.appendChild(cell);
         }
     }
+    console.log(computer.gameboard.board);
+    console.log(computer.gameboard.receiveAttack(1, 2));
+    console.log(computer.gameboard.receiveAttack(5, 5));
 }
 
 document
@@ -370,4 +367,4 @@ updateCurrentShipInfo();
 computerPlacement();
 generateComputerGrid();
 generateModalGrid();
-updateTurnMessage(isPlayerTurn);
+// updateTurnMessage(isPlayerTurn);
