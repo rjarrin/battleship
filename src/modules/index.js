@@ -41,11 +41,21 @@ const computerShips = [
     { type: 'Boat', length: 2 },
 ];
 
-function showNotification(message) {
+function showNotification(message, backgroundColor = '#f44336', position = 'right') {
     const notificationArea = document.getElementById("notification-area");
     const notificationMessage = document.getElementById("notification-message");
     notificationMessage.textContent = message;
     notificationArea.classList.add("show");
+
+    notificationArea.style.backgroundColor = backgroundColor;
+    // Reset position to avoid conflicts between left and right settings
+    notificationArea.style.left = '';
+    notificationArea.style.right = '';
+    if (position === 'left') {
+        notificationArea.style.left = '20px'; // Position on the left
+    } else {
+        notificationArea.style.right = '20px'; // Default to right
+    }
 
     setTimeout(() => {
         notificationArea.classList.remove("show");
@@ -241,7 +251,6 @@ function generateModalGrid() {
                         // console.log(player1.gameboard.board);
                     }
                 } else {
-                    // alert('Cannot place a ship here');
                     showNotification('Cannot place a ship here');
                 }
             });
@@ -307,7 +316,8 @@ function computerAttack() {
                 cell.classList.add('attacked');
                 const sunkShipName = player1.gameboard.receiveAttack(row, col);
                 if (sunkShipName) {
-                    alert(`Computer sunk your ${sunkShipName}!`);
+                    showNotification(`Computer sunk your ${sunkShipName}!`, 'darkred', 'left');
+                    // alert(`Computer sunk your ${sunkShipName}!`);
                 }
             } else {
                 cell.style.backgroundColor = 'lightblue';
@@ -341,7 +351,8 @@ function simulateAttack(row, col) {
         cell.classList.add('attacked');
         const sunkShipName = computer.gameboard.receiveAttack(row, col);
         if (sunkShipName) {
-            alert(`You sunk the computer's ${sunkShipName}!`);
+            // alert(`You sunk the computer's ${sunkShipName}!`);
+            showNotification(`You sunk the computer's ${sunkShipName}`, 'navy', 'right');
         }
     } else {
         cell.style.backgroundColor = 'lightblue';
