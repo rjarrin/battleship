@@ -24,6 +24,7 @@ body {
     background-color: #2a334a;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-family: MyFont;
     color: white;
 }
@@ -89,4 +90,15 @@ body {
     margin-bottom: 10px;
     font-size: 20px;
     color: #333;
+}
+
+footer {
+    color: white;
+    background-color: black;
+    margin-bottom: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: MyFont;
+    font-size: smaller;
 }

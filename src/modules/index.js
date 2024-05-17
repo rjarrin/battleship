@@ -279,6 +279,7 @@ function computerPlacement() {
 // }
 
 function computerAttack() {
+    if(gameOver) return;
     let attacked = true;
 
     do {
@@ -300,7 +301,6 @@ function computerAttack() {
                 cell.style.backgroundColor = 'lightblue';
                 cell.classList.add('attacked');
             }
-            player1.gameboard.receiveAttack(row, col);
             attacked = false;
         }
     } while (attacked);
@@ -332,7 +332,7 @@ function simulateAttack(row, col) {
             alert(`You sunk the computer's ${sunkShipName}!`);
         }
     } else {
-        cell.style.backgroundColor = 'grey';
+        cell.style.backgroundColor = 'lightblue';
         cell.classList.add('attacked');
     }
 
