@@ -9,6 +9,9 @@ import ComputerPlayer from './computerPlayer';
 // import Gameboard from './gameboard';
 // import Ship from './ship';
 
+// Define game status
+let gameOver = false;
+
 // Initialize the players
 const player1 = new RealPlayer();
 const computer = new ComputerPlayer();
@@ -304,6 +307,7 @@ function computerAttack() {
 
     if (player1.gameboard.allShipsSunk()) {
         alert('You Lose!');
+        gameOver = true;
     }
     // Update the turn
     isPlayerTurn = true;
@@ -334,6 +338,7 @@ function simulateAttack(row, col) {
 
     if (computer.gameboard.allShipsSunk()) {
         alert('You Win!');
+        gameOver = true;
     }
 
     // Switch turns
@@ -355,6 +360,7 @@ function generateComputerGrid() {
 
             // Attach event listener for user clicks
             cell.addEventListener('click', () => {
+                if (gameOver) return;
                 simulateAttack(i, j);
             });
 
