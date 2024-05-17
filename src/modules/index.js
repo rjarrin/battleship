@@ -285,11 +285,14 @@ function computerAttack() {
 
         // Check if the cell was already attacked
         const cell = document.getElementById(`cell-${row}-${col}`);
-        console.log(`ATTEMPTING TO ATTACK ${cell.id}`);
         if (!cell.classList.contains('attacked')) {
             if (player1.gameboard.board[row][col]) {
                 cell.style.backgroundColor = 'red';
                 cell.classList.add('attacked');
+                const sunkShipName = player1.gameboard.receiveAttack(row, col);
+                if (sunkShipName) {
+                    alert(`Computer sunk your ${sunkShipName}!`);
+                }
             } else {
                 cell.style.backgroundColor = 'lightblue';
                 cell.classList.add('attacked');
@@ -299,8 +302,8 @@ function computerAttack() {
         }
     } while (attacked);
 
-    if(player1.gameboard.allShipsSunk()) {
-        alert("You Lose!");
+    if (player1.gameboard.allShipsSunk()) {
+        alert('You Lose!');
     }
     // Update the turn
     isPlayerTurn = true;
@@ -320,14 +323,17 @@ function simulateAttack(row, col) {
     if (computer.gameboard.board[row][col]) {
         cell.style.backgroundColor = 'red';
         cell.classList.add('attacked');
+        const sunkShipName = computer.gameboard.receiveAttack(row, col);
+        if (sunkShipName) {
+            alert(`You sunk the computer's ${sunkShipName}!`);
+        }
     } else {
         cell.style.backgroundColor = 'grey';
         cell.classList.add('attacked');
     }
-    computer.gameboard.receiveAttack(row, col);
 
     if (computer.gameboard.allShipsSunk()) {
-        alert("You Win!");
+        alert('You Win!');
     }
 
     // Switch turns
@@ -365,8 +371,8 @@ function generateComputerGrid() {
         }
     }
     console.log(computer.gameboard.board);
-    console.log(computer.gameboard.receiveAttack(1, 2));
-    console.log(computer.gameboard.receiveAttack(5, 5));
+    // console.log(computer.gameboard.receiveAttack(1, 2));
+    // console.log(computer.gameboard.receiveAttack(5, 5));
 }
 
 document
