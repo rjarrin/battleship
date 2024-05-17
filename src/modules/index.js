@@ -41,6 +41,17 @@ const computerShips = [
     { type: 'Boat', length: 2 },
 ];
 
+function showNotification(message) {
+    const notificationArea = document.getElementById("notification-area");
+    const notificationMessage = document.getElementById("notification-message");
+    notificationMessage.textContent = message;
+    notificationArea.classList.add("show");
+
+    setTimeout(() => {
+        notificationArea.classList.remove("show");
+    }, 3000);
+}
+
 function updateCurrentShipInfo() {
     const shipInfo = document.getElementById('current-ship-info');
     if (shipInfo) {
@@ -230,7 +241,8 @@ function generateModalGrid() {
                         // console.log(player1.gameboard.board);
                     }
                 } else {
-                    alert('Cannot place a ship here');
+                    // alert('Cannot place a ship here');
+                    showNotification('Cannot place a ship here');
                 }
             });
 

@@ -92,6 +92,26 @@ body {
     color: #333;
 }
 
+#notification-area {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+    z-index: 2;
+    font-family: MyFont;
+    font-size: larger;
+}
+
+#notification-area.show {
+    opacity: 1;
+}
+
 footer {
     color: white;
     background-color: black;
