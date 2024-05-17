@@ -20,10 +20,10 @@ let isPlayerTurn = true;
 const { gameboard } = player1;
 const ships = [
     { type: 'Carrier', length: 5 },
-    // { type: 'Battleship', length: 4 },
-    // { type: 'Submarine', length: 3 },
-    // { type: 'Destroyer', length: 3 },
-    // { type: 'Boat', length: 2 },
+    { type: 'Battleship', length: 4 },
+    { type: 'Submarine', length: 3 },
+    { type: 'Destroyer', length: 3 },
+    { type: 'Boat', length: 2 },
 ];
 let currentShipIndex = 0;
 let currentShip = ships[currentShipIndex];
@@ -224,7 +224,7 @@ function generateModalGrid() {
                         const newGrid = modalGrid.cloneNode(true);
                         playerContainer.appendChild(newGrid);
 
-                        console.log(player1.gameboard.board);
+                        // console.log(player1.gameboard.board);
                     }
                 } else {
                     alert('Cannot place a ship here');
@@ -260,20 +260,20 @@ function computerPlacement() {
     });
 }
 
-function updateTurnMessage(playerTurn) {
-    const playerTurnMessage = document.getElementById('player-turn-message');
-    const computerTurnMessage = document.getElementById(
-        'computer-turn-message',
-    );
+// function updateTurnMessage(playerTurn) {
+//     const playerTurnMessage = document.getElementById('player-turn-message');
+//     const computerTurnMessage = document.getElementById(
+//         'computer-turn-message',
+//     );
 
-    if (playerTurn) {
-        playerTurnMessage.textContent = 'Your Turn';
-        computerTurnMessage.textContent = '';
-    } else {
-        playerTurnMessage.textContent = '';
-        computerTurnMessage.textContent = "Computer's Turn";
-    }
-}
+//     if (playerTurn) {
+//         playerTurnMessage.textContent = 'Your Turn';
+//         computerTurnMessage.textContent = '';
+//     } else {
+//         playerTurnMessage.textContent = '';
+//         computerTurnMessage.textContent = "Computer's Turn";
+//     }
+// }
 
 function computerAttack() {
     let attacked = true;
@@ -298,9 +298,13 @@ function computerAttack() {
             attacked = false;
         }
     } while (attacked);
+
+    if(player1.gameboard.allShipsSunk()) {
+        alert("You Lose!");
+    }
     // Update the turn
     isPlayerTurn = true;
-    updateTurnMessage(isPlayerTurn);
+    // updateTurnMessage(isPlayerTurn);
 }
 
 function simulateAttack(row, col) {
@@ -321,9 +325,14 @@ function simulateAttack(row, col) {
         cell.classList.add('attacked');
     }
     computer.gameboard.receiveAttack(row, col);
+
+    if (computer.gameboard.allShipsSunk()) {
+        alert("You Win!");
+    }
+
     // Switch turns
     isPlayerTurn = false;
-    updateTurnMessage(isPlayerTurn);
+    // updateTurnMessage(isPlayerTurn);
     computerAttack();
 }
 
@@ -344,13 +353,13 @@ function generateComputerGrid() {
             });
 
             // Update the cell's style based on the gameboard state
-            if (computer.gameboard.board[i][j]) {
-                // If the cell contains a ship, update the style accordingly
-                cell.style.backgroundColor = 'blue';
-            } else {
-                // If the cell is empty, update the style accordingly
-                cell.style.backgroundColor = 'white';
-            }
+            // if (computer.gameboard.board[i][j]) {
+            //     // If the cell contains a ship, update the style accordingly
+            //     // cell.style.backgroundColor = 'blue';
+            // } else {
+            //     // If the cell is empty, update the style accordingly
+            //     // cell.style.backgroundColor = 'white';
+            // }
 
             computerContainer.appendChild(cell);
         }
