@@ -359,9 +359,10 @@ function simulateAttack(row, col) {
 
     const cell = document.getElementById(`computer-cell-${row}-${col}`);
     if (cell.classList.contains('attacked')) {
-        alert(
-            'This cell has already been attacked. Please choose another cell',
-        );
+        // alert(
+        //     'This cell has already been attacked. Please choose another cell',
+        // );
+        showNotification('This cell has already been attacked. Please choose another cell', 'right');
         return;
     }
     if (computer.gameboard.board[row][col]) {

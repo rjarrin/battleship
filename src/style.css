@@ -81,11 +81,14 @@ body {
     width: 30rem;
     height: 30rem;
     margin-top: 10px;
+    margin-left: 10px;
 }
 
 #computer-container div {
     background-color: white;
     border: 1px solid black;
+    width: 46px;
+    height: 46px;
 }
 
 #player-turn-message,
@@ -141,4 +144,25 @@ footer {
     font-family: MyFont;
     font-size: smaller;
     flex-shrink: 0;
+    width: 100%;
+}
+
+#modal-rotate {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+#modal-rotate:hover {
+    background-color: #0056b3;
+}
+
+#modal-rotate:active {
+    background-color: #004085;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
