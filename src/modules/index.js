@@ -1,8 +1,6 @@
 import '../style.css';
 import RealPlayer from './realPlayer';
 import ComputerPlayer from './computerPlayer';
-// import Gameboard from './gameboard';
-// import Ship from './ship';
 
 // Define game status
 let gameOver = false;
@@ -14,8 +12,10 @@ const computer = new ComputerPlayer();
 // Define the initial turn
 let isPlayerTurn = true;
 
-// Initalize the gameboard and ships
+// Game setup
+// Extract gameboard from player1 instance
 const { gameboard } = player1;
+// Define player ships with types and lengths
 const ships = [
     { type: 'Carrier', length: 5 },
     { type: 'Battleship', length: 4 },
@@ -23,11 +23,14 @@ const ships = [
     { type: 'Destroyer', length: 3 },
     { type: 'Boat', length: 2 },
 ];
+// Index to track current ship being placed
 let currentShipIndex = 0;
+// Current ship to be placed (set to Carrier)
 let currentShip = ships[currentShipIndex];
+// Orientation of current ship placement
 let currentOrientation = 'horizontal';
 
-// Computer ships
+// Setup for computer ships
 const computerShips = [
     { type: 'Carrier', length: 5 },
     { type: 'Battleship', length: 4 },
@@ -36,6 +39,7 @@ const computerShips = [
     { type: 'Boat', length: 2 },
 ];
 
+// Display game notifications to player
 function showNotification(
     message,
     backgroundColor = '#f44336',
@@ -56,11 +60,13 @@ function showNotification(
         notificationArea.style.right = '20px'; // Default to right
     }
 
+    // Remove notification window after ~3 seconds
     setTimeout(() => {
         notificationArea.classList.remove('show');
     }, 3000);
 }
 
+// Display game end message to player
 function showEndGameMessage(message, backgroundColor) {
     // Create the notification element
     const notification = document.createElement('div');
@@ -73,11 +79,13 @@ function showEndGameMessage(message, backgroundColor) {
     // Append the notification to the body
     document.body.appendChild(notification);
 
+    // Remove the notification window after ~3 seconds
     setTimeout(() => {
         document.body.removeChild(notification);
     }, 3000);
 }
 
+// Update the UI with the current ship information (name)
 function updateCurrentShipInfo() {
     const shipInfo = document.getElementById('current-ship-info');
     if (shipInfo) {
@@ -85,12 +93,13 @@ function updateCurrentShipInfo() {
     }
 }
 
-// Toggle ship orientation (rotate button)
+// Toggle current ship orientation (rotate button)
 function toggleOrientation() {
     currentOrientation =
         currentOrientation === 'horizontal' ? 'vertical' : 'horizontal';
 }
 
+// Generates modal grid for player1 ship placement
 function generateModalGrid() {
     const modalGrid = document.getElementById('modal-grid');
     for (let i = 0; i < gameboard.size; i += 1) {
@@ -230,19 +239,17 @@ function generateModalGrid() {
                             document.getElementById('player-container');
                         const newGrid = modalGrid.cloneNode(true);
                         playerContainer.appendChild(newGrid);
-
-                        // console.log(player1.gameboard.board);
                     }
                 } else {
                     showNotification('Cannot place a ship here');
                 }
             });
-
             modalGrid.appendChild(cell);
         }
     }
 }
 
+// Places the computer's ships randomly on the gameboard
 function computerPlacement() {
     computerShips.forEach((ship) => {
         let placed = false;
@@ -267,8 +274,12 @@ function computerPlacement() {
     });
 }
 
+// Handles the computer's attacks against the player's ships
 function computerAttack() {
+    // Do nothing if the game is already over
     if (gameOver) return;
+
+    // Flag to check if attack was completed
     let attacked = true;
 
     do {
@@ -294,10 +305,12 @@ function computerAttack() {
                 cell.style.backgroundColor = 'lightblue';
                 cell.classList.add('attacked');
             }
+            // If attack was on an already attacked cell, order was not completed and iteration should restart
             attacked = false;
         }
     } while (attacked);
 
+    // Display end game message on computer win
     if (player1.gameboard.allShipsSunk()) {
         showEndGameMessage('You Lose!', 'darkred');
         gameOver = true;
@@ -306,10 +319,13 @@ function computerAttack() {
     isPlayerTurn = true;
 }
 
+// Simulates an attack by the player on the computer's ships
 function simulateAttack(row, col) {
+    // Prevent player from attacking if it is not their turn
     if (!isPlayerTurn) return;
 
     const cell = document.getElementById(`computer-cell-${row}-${col}`);
+    // If cell was already attacked, advise the user and prompt them to try another cell.
     if (cell.classList.contains('attacked')) {
         showNotification(
             'This cell has already been attacked. Please choose another cell',
@@ -317,10 +333,13 @@ function simulateAttack(row, col) {
         );
         return;
     }
+    // If the cell was a ship (i.e., not null)
     if (computer.gameboard.board[row][col]) {
         cell.style.backgroundColor = 'red';
+        // Define the cell as attacked and set the enemy ship to receive attack
         cell.classList.add('attacked');
         const sunkShipName = computer.gameboard.receiveAttack(row, col);
+        // Advise player of ship sinking if ship is sunk
         if (sunkShipName) {
             showNotification(
                 `You sunk the computer's ${sunkShipName}`,
@@ -332,7 +351,7 @@ function simulateAttack(row, col) {
         cell.style.backgroundColor = 'lightblue';
         cell.classList.add('attacked');
     }
-
+    // Display end game message on player win
     if (computer.gameboard.allShipsSunk()) {
         showEndGameMessage('You Win!', 'cyan');
         gameOver = true;
@@ -340,10 +359,11 @@ function simulateAttack(row, col) {
 
     // Switch turns
     isPlayerTurn = false;
-    // updateTurnMessage(isPlayerTurn);
+    // Allow computer to make its move
     computerAttack();
 }
 
+// Generates the computer's game grid for displaying the game state
 function generateComputerGrid() {
     const computerContainer = document.getElementById('computer-container');
 
@@ -361,7 +381,7 @@ function generateComputerGrid() {
                 simulateAttack(i, j);
             });
 
-            // Update the cell's style based on the gameboard state
+            // DEBUG: Update the cell's style based on the gameboard state
             // if (computer.gameboard.board[i][j]) {
             //     // If the cell contains a ship, update the style accordingly
             //     // cell.style.backgroundColor = 'blue';
@@ -382,4 +402,3 @@ updateCurrentShipInfo();
 computerPlacement();
 generateComputerGrid();
 generateModalGrid();
-// updateTurnMessage(isPlayerTurn);
