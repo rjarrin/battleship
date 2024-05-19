@@ -1,6 +1,3 @@
-/* eslint-disable no-alert */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable import/no-named-as-default-member */
 import Ship from './ship';
 
 class Gameboard {

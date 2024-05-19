@@ -1,6 +1,3 @@
-/* eslint-disable no-loop-func */ // --------> NEED TO ENABLE AND FIX THE BUGS
-/* eslint-disable import/no-named-as-default-member */
-/* eslint-disable import/no-named-as-default */
 import '../style.css';
 import RealPlayer from './realPlayer';
 import ComputerPlayer from './computerPlayer';

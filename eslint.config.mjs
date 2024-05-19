@@ -16,4 +16,11 @@ export default [
   {languageOptions: { globals: globals.browser }},
   ...compat.extends("airbnb-base"),
   eslintConfigPrettier,
+  {
+    "rules": {
+      "no-loop-func": "off",
+      "import/no-named-as-default-member": "off",
+      "import/no-named-as-default": "off"
+    }
+  }
 ];
