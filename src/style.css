@@ -113,6 +113,20 @@ body {
     opacity: 1;
 }
 
+#end-game-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    padding: 40px;
+    font-size: 3em;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    font-family: MyFont;
+}
+
 footer {
     color: white;
     background-color: black;

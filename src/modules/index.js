@@ -62,6 +62,23 @@ function showNotification(message, backgroundColor = '#f44336', position = 'righ
     }, 3000);
 }
 
+function showEndGameMessage(message, backgroundColor) {
+    // Create the notification element
+    const notification = document.createElement("div");
+    notification.id = "end-game-notification";
+
+    // Style the message accordingly
+    notification.style.backgroundColor = backgroundColor;
+    notification.textContent = message;
+
+    // Append the notification to the body
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        document.body.removeChild(notification);
+    }, 3000);
+}
+
 function updateCurrentShipInfo() {
     const shipInfo = document.getElementById('current-ship-info');
     if (shipInfo) {
@@ -328,7 +345,8 @@ function computerAttack() {
     } while (attacked);
 
     if (player1.gameboard.allShipsSunk()) {
-        alert('You Lose!');
+        showEndGameMessage("You Lose!", "darkred");
+        console.log("YOU LOSE");
         gameOver = true;
     }
     // Update the turn
@@ -360,7 +378,8 @@ function simulateAttack(row, col) {
     }
 
     if (computer.gameboard.allShipsSunk()) {
-        alert('You Win!');
+        showEndGameMessage("You Win!", "cyan");
+        console.log("YOU WIN");
         gameOver = true;
     }
 
