@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-alert */
 /* eslint-disable no-loop-func */ // --------> NEED TO ENABLE AND FIX THE BUGS
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
@@ -41,11 +39,15 @@ const computerShips = [
     { type: 'Boat', length: 2 },
 ];
 
-function showNotification(message, backgroundColor = '#f44336', position = 'right') {
-    const notificationArea = document.getElementById("notification-area");
-    const notificationMessage = document.getElementById("notification-message");
+function showNotification(
+    message,
+    backgroundColor = '#f44336',
+    position = 'right',
+) {
+    const notificationArea = document.getElementById('notification-area');
+    const notificationMessage = document.getElementById('notification-message');
     notificationMessage.textContent = message;
-    notificationArea.classList.add("show");
+    notificationArea.classList.add('show');
 
     notificationArea.style.backgroundColor = backgroundColor;
     // Reset position to avoid conflicts between left and right settings
@@ -58,14 +60,14 @@ function showNotification(message, backgroundColor = '#f44336', position = 'righ
     }
 
     setTimeout(() => {
-        notificationArea.classList.remove("show");
+        notificationArea.classList.remove('show');
     }, 3000);
 }
 
 function showEndGameMessage(message, backgroundColor) {
     // Create the notification element
-    const notification = document.createElement("div");
-    notification.id = "end-game-notification";
+    const notification = document.createElement('div');
+    notification.id = 'end-game-notification';
 
     // Style the message accordingly
     notification.style.backgroundColor = backgroundColor;
@@ -100,39 +102,6 @@ function generateModalGrid() {
             cell.dataset.row = i;
             cell.dataset.col = j;
             cell.id = `cell-${i}-${j}`;
-
-            // Mouseover event
-            cell.addEventListener('mouseover', () => {
-                const row = parseInt(cell.dataset.row, 10);
-                const col = parseInt(cell.dataset.col, 10);
-                const startX = row;
-                const startY = col;
-                let endX;
-                let endY;
-                // Calculate endX and endY based on the current orientation
-                if (currentOrientation === 'horizontal') {
-                    endX = startX + currentShip.length - 1;
-                    endY = startY;
-                } else {
-                    // vertical
-                    endX = startX;
-                    endY = startY + currentShip.length - 1;
-                }
-
-                // Highlight all cells within the ship's range
-                for (let x = startX; x <= endX; x += 1) {
-                    for (let y = startY; y <= endY; y += 1) {
-                        const cell2 = document.getElementById(`cell-${x}-${y}`);
-                        if (cell2) {
-                            if (cell2.classList.contains('placed')) {
-                                cell2.style.backgroundColor = 'red';
-                            } else {
-                                cell2.style.backgroundColor = 'lightblue';
-                            }
-                        }
-                    }
-                }
-            });
 
             // Mouseover event
             cell.addEventListener('mouseover', () => {
@@ -301,23 +270,8 @@ function computerPlacement() {
     });
 }
 
-// function updateTurnMessage(playerTurn) {
-//     const playerTurnMessage = document.getElementById('player-turn-message');
-//     const computerTurnMessage = document.getElementById(
-//         'computer-turn-message',
-//     );
-
-//     if (playerTurn) {
-//         playerTurnMessage.textContent = 'Your Turn';
-//         computerTurnMessage.textContent = '';
-//     } else {
-//         playerTurnMessage.textContent = '';
-//         computerTurnMessage.textContent = "Computer's Turn";
-//     }
-// }
-
 function computerAttack() {
-    if(gameOver) return;
+    if (gameOver) return;
     let attacked = true;
 
     do {
@@ -333,8 +287,11 @@ function computerAttack() {
                 cell.classList.add('attacked');
                 const sunkShipName = player1.gameboard.receiveAttack(row, col);
                 if (sunkShipName) {
-                    showNotification(`Computer sunk your ${sunkShipName}!`, 'darkred', 'left');
-                    // alert(`Computer sunk your ${sunkShipName}!`);
+                    showNotification(
+                        `Computer sunk your ${sunkShipName}!`,
+                        'darkred',
+                        'left',
+                    );
                 }
             } else {
                 cell.style.backgroundColor = 'lightblue';
@@ -345,13 +302,11 @@ function computerAttack() {
     } while (attacked);
 
     if (player1.gameboard.allShipsSunk()) {
-        showEndGameMessage("You Lose!", "darkred");
-        console.log("YOU LOSE");
+        showEndGameMessage('You Lose!', 'darkred');
         gameOver = true;
     }
     // Update the turn
     isPlayerTurn = true;
-    // updateTurnMessage(isPlayerTurn);
 }
 
 function simulateAttack(row, col) {
@@ -359,10 +314,10 @@ function simulateAttack(row, col) {
 
     const cell = document.getElementById(`computer-cell-${row}-${col}`);
     if (cell.classList.contains('attacked')) {
-        // alert(
-        //     'This cell has already been attacked. Please choose another cell',
-        // );
-        showNotification('This cell has already been attacked. Please choose another cell', 'right');
+        showNotification(
+            'This cell has already been attacked. Please choose another cell',
+            'right',
+        );
         return;
     }
     if (computer.gameboard.board[row][col]) {
@@ -370,8 +325,11 @@ function simulateAttack(row, col) {
         cell.classList.add('attacked');
         const sunkShipName = computer.gameboard.receiveAttack(row, col);
         if (sunkShipName) {
-            // alert(`You sunk the computer's ${sunkShipName}!`);
-            showNotification(`You sunk the computer's ${sunkShipName}`, 'navy', 'right');
+            showNotification(
+                `You sunk the computer's ${sunkShipName}`,
+                'navy',
+                'right',
+            );
         }
     } else {
         cell.style.backgroundColor = 'lightblue';
@@ -379,8 +337,7 @@ function simulateAttack(row, col) {
     }
 
     if (computer.gameboard.allShipsSunk()) {
-        showEndGameMessage("You Win!", "cyan");
-        console.log("YOU WIN");
+        showEndGameMessage('You Win!', 'cyan');
         gameOver = true;
     }
 
@@ -419,9 +376,6 @@ function generateComputerGrid() {
             computerContainer.appendChild(cell);
         }
     }
-    console.log(computer.gameboard.board);
-    // console.log(computer.gameboard.receiveAttack(1, 2));
-    // console.log(computer.gameboard.receiveAttack(5, 5));
 }
 
 document
