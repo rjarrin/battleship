@@ -10,12 +10,16 @@
 body {
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 #main-container {
     display: flex;
     justify-content: space-evenly;
     padding: 20px;
+    flex-grow: 1;
 }
 
 #header {
@@ -130,10 +134,11 @@ body {
 footer {
     color: white;
     background-color: black;
-    margin-bottom: auto;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: MyFont;
     font-size: smaller;
+    flex-shrink: 0;
 }
